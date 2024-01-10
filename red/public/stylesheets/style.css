@@ -7,3 +7,9 @@ a {
   color: #00B7FF;
 }
  */
+
+ /* MAPA */
+#mapa_principal {
+  height: 280px;
+  background-color: var(--bs-info);
+}
