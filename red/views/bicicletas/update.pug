@@ -1,0 +1,34 @@
+extends ../layout
+
+block content 
+  a(href='/bicicletas') Volver
+  br
+  br
+  br
+  h1 Editar Bicicleta
+  br
+  br
+
+  form.form-signup(action='/bicicletas/' + bici.id + '/update' method='post')
+    .row.input-group-newsletter
+        .col
+            label(for='id') ID: 
+            input#id(type='text' name='id' value= bici.id)
+        .col     
+            label(for='color') Color: 
+            select#color.form-control.form-control-sm(name='color')
+                each color in colors
+                    if bici.color == color.nombre
+                        selected = true
+                    option(style='background-color:'+color.nombreProp value=color.nombre selected=selected)= color.nombre
+        .col 
+            label(for='modelo') Modelo: 
+            input#modelo(type='text' name='modelo' value= bici.modelo)
+        .col 
+            label(for='lat') Latitud: 
+            input#lat(type='text' name='lat' value= bici.ubicacion[0])
+        .col 
+            label(for='lng') Longitud: 
+            input#lng(type='text' name='lng' value = bici.ubicacion[1])
+        .col
+            input.btn.btn-primary(type="submit", value='OK')

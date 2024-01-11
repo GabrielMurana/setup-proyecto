@@ -1,0 +1,33 @@
+extends ../layout
+
+block content 
+  a(href='/bicicletas') Volver
+  br
+  br
+  br
+  h1 Nueva Bicicleta
+  br
+  br
+
+  form.form-signup(action='/bicicletas/create' method='post')
+    .row.input-group-newsletter
+        .col
+            label(for='id') ID: 
+            input#id(type='text' name='id')
+        .col     
+            label(for='color') Color: 
+            select#color.form-control.form-control-sm(name='color')
+                option(value= 0) seleccionar
+                each color in colors
+                    option(style='background-color:'+color.nombreProp value=color.nombre)= color.nombre
+        .col 
+            label(for='modelo') Modelo: 
+            input#modelo(type='text' name='modelo')
+        .col 
+            label(for='lat') Latitud: 
+            input#lat(type='text' name='lat')
+        .col 
+            label(for='lng') Longitud: 
+            input#lng(type='text' name='lng')
+        .col
+            input.btn.btn-primary(type="submit", value='OK')
