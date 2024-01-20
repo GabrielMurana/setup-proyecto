@@ -23,6 +23,7 @@ exports.biciList = function(req, res){
  */
 exports.biciCreate = function(req, res){
     const reqBody = req.body
+    console.log(reqBody)
     bici = new Bicicleta(reqBody.id, reqBody.color, reqBody.modelo)
     if(reqBody.lat && reqBody.lng){ 
         bici.ubicacion = [reqBody.lat, reqBody.lng]
@@ -43,6 +44,7 @@ exports.biciCreate = function(req, res){
 exports.biciDelete = function(req, res){
     const id = req.body.id
     Bicicleta.removeById(id)
+    console.log(req.body)
     res.status(204).send()
 
 }
