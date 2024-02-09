@@ -11,6 +11,22 @@ const apiBicicletasRouter = require('./routes/api/bicicletasApi')
 
 var app = express();
 
+// Coneccion a la BDD mongo con mongoose
+
+const mongoose = require('mongoose')
+
+const bddString = 'mongodb://localhost:27017/red_bicicletas' // string de conexion
+// me conecto a la bdd. Si no existe se crea a la hora de insertar o eliminar un doc NO antes
+// Coneccion segun la doc V8.1.1 Usando  async await
+async function connect(){
+  await mongoose.connect(bddString) 
+}
+connect()
+  .then(console.log('Conexion exitosa'))
+  .catch(err => console.error('Error en la conexion ', err))
+
+// Fin conexion mongo
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');

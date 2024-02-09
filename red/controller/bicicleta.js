@@ -2,8 +2,11 @@
 const Bicicleta = require('../model/bicicleta')
 
 // Renderizo la vista pasando el array de objetos por param
-exports.bicicletaList = function(req, res){
-    res.render('bicicletas/index', {bicis: Bicicleta.allBicis})
+// Uso async await para esperar el retorno de la bdd
+exports.bicicletaList = async function(req, res){
+    const bicis = await Bicicleta.allBicis()
+    console.log(bicis)    
+    res.render('bicicletas/index', {bicis})
 }
 // Fomrmulario para crear biciletas
 exports.bicicletaCreateGet = function(req, res){

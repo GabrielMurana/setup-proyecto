@@ -1,61 +1,47 @@
-const Bicicleta = function(id, color, modelo, ubicacion){
-    this.id = id
-    this.color = color
-    this.modelo = modelo
-    this.ubicacion = ubicacion
+const mongose = require('mongoose')
+const Schema = mongose.Schema
+
+// Defino el esquema, sera el formato de la coleccion
+
+const bicicletaSchema = new Schema({
+    code: Number,
+    color: String,
+    modelo: String,
+    ubicacion: {
+        type: [Number], index: {type: '2dsphare', sparce: true} // Array de numeros ademas es index.
+    }
+})
+
+// creo los metodos.
+bicicletaSchema.statics.createInstance = function(code, color, modelo, ubicacion){
+    console.log( `Code: ${code} | Color: ${color} | Modelo: ${modelo} | Ubicacion:  ${ubicacion}`)
+
+    return new this({
+        code,
+        color,
+        modelo,
+        ubicacion
+    })
 }
 
-Bicicleta.colors = [
-    {
-        id: 1,
-        nombre: 'Rojo',
-        nombreProp: 'red'
-    },
-    {
-        id: 2,
-        nombre: 'Verde',
-        nombreProp: 'green'
-    },
-    {
-        id: 3,
-        nombre: 'Marron',
-        nombreProp: 'brown'
-    },
-    {
-        id: 4,
-        nombre: 'Violeta',
-        nombreProp: 'violet'
-    },
-]
-Bicicleta.allBicis = []
-
-// Metodos
-// Agregar Bicicleta
-Bicicleta.add = function(bici){
-    Bicicleta.allBicis.push(bici)
-}
-// Buscar Bicicleta por id
-Bicicleta.find = function(id){
-    const bici = Bicicleta.allBicis.find(bici => bici.id == id)
-    if (bici) return bici
-    // Si no la encuentra lanza una excepcion
-    throw new Error (`No existe la bici con el id ${id}`)
-
+bicicletaSchema.methods.toString = function(){
+    return `Code: ${code} | Color: ${color} | Modelo: ${modelo} | Ubicacion:  ${ubicacion}`
 }
 
-Bicicleta.removeById = function(id) {
-    // Filter retorna un array con los elementos que cumplan la condicion
-    // Como no modifica el array original modifoco el original con el nuevo array
-    Bicicleta.allBicis = Bicicleta.allBicis.filter(bici => bici.id != id)
+bicicletaSchema.statics.allBicis = function(){
+    return this.find() // retorna un query que se maneja como una promesa metodo then.
 }
 
+bicicletaSchema.methods.add = function(bici){
+    return this.create(bici)
+}
 
+bicicletaSchema.methods.findByCode = function (code){
+    return this.findOne({code})
+}
 
-const biciA = new Bicicleta(1, 'Rojo', 'Ciudad', [-34.8386011, -56.1320522])
-const biciB = new Bicicleta(2, 'Verde', 'Ciudad', [-34.8505188,-56.1338887])
+bicicletaSchema.methods.removeByCode = function (code){
+    return this.deleteOne({code})
+}
 
-Bicicleta.add(biciA)
-Bicicleta.add(biciB)
-
-// Exporto el modulo
-module.exports = Bicicleta
+module.exports = mongose.model('Bicicleta', bicicletaSchema) // El nombre del modelo es el que se crea como colleccion en munus y plural
