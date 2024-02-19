@@ -10,7 +10,7 @@ exports.bicicletaList = async function(req, res){
 }
 // Fomrmulario para crear biciletas
 exports.bicicletaCreateGet = function(req, res){
-    res.render('bicicletas/create', {colors: Bicicleta.colors})
+    res.render('bicicletas/create')
 }
 // crear biciletas POST
 exports.bicicletaCreatePost = function(req, res){

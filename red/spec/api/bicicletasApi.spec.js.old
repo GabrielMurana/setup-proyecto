@@ -1,4 +1,4 @@
-const server = require('../../bin/www') // lo mimporto para que se ejecute. El server
+//const server = require('../../bin/www') // lo mimporto para que se ejecute. El server
 const Bicicleta = require('../../model/bicicleta')
 const request = require('request')
 
