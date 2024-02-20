@@ -32,7 +32,7 @@ bicicletaSchema.statics.allBicis = function(){
     return this.find() // retorna un query que se maneja como una promesa metodo then.
 }
 
-bicicletaSchema.methods.add = function(bici){
+bicicletaSchema.statics.add = function(bici){
     return this.create(bici)
 }
 
@@ -44,4 +44,4 @@ bicicletaSchema.methods.removeByCode = function (code){
     return this.deleteOne({code})
 }
 
-module.exports = mongose.model('Bicicleta', bicicletaSchema) // El nombre del modelo es el que se crea como colleccion en munus y plural
+module.exports = mongose.model('Bicicleta', bicicletaSchema) // El nombre del modelo es el que se crea como colleccion en minusculas y plural

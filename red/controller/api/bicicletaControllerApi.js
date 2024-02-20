@@ -21,7 +21,7 @@ exports.biciList = function(req, res){
  * Crea una bicicleta desde la api con el metodo post tomando los datos del body
  * retorna el listado de bicicletas
  */
-exports.biciCreate = function(req, res){
+exports.biciCreateOld = function(req, res){
     const reqBody = req.body
     console.log(reqBody)
     bici = new Bicicleta(reqBody.id, reqBody.color, reqBody.modelo)
@@ -35,6 +35,31 @@ exports.biciCreate = function(req, res){
     })
 
 }
+
+exports.biciCreate = function (req, res) {
+    const reqBody = req.body
+    console.log(reqBody)
+  
+    // 1, 'verde', 'urbana', [-22, -33]
+    const bici = Bicicleta.createInstance(
+      reqBody.code,
+      reqBody.color,
+      reqBody.modelo,
+      [33, 44]
+    )
+    console.log('Bici', bici)
+  
+    Bicicleta.add(bici)
+      .then(() => {
+        return Bicicleta.allBicis()
+      })
+      .then((bicis) => {
+        res.status(200).json({
+          bicicletas: bicis
+        })
+      })
+  }
+  
 
 /**
  * @param {*} req 

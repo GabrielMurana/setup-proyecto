@@ -9,6 +9,8 @@ var usersRouter = require('./routes/users');
 var bicicletasRouter = require('./routes/bicicletas');
 const apiBicicletasRouter = require('./routes/api/bicicletasApi')
 
+const apiUsuariosRouter = require('./routes/api/usuario')
+
 var app = express();
 
 // Coneccion a la BDD mongo con mongoose
@@ -40,8 +42,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/bicicletas', bicicletasRouter);
-
 app.use('/api/bicicletas', apiBicicletasRouter)
+app.use('/api/usuario', apiUsuariosRouter)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
