@@ -1,55 +1,81 @@
 const Bicicleta = require('../../model/bicicleta')
 const mongoose = require('mongoose')
 // Me conecto a la BDD de test.
-const bddString = 'mongodb://localhoster:27017/red_bicicletas_test' // string de conexion
-//mongoose.set('bufferCommands', false);
+const bddString = 'mongodb://localhost:27017/red_bicicletas_test' // string de conexion
+
 beforeAll((done) =>  {
-  mongoose.connect('mongodb://127.0.0.1:27017/test', {
+  mongoose.connect(bddString, {
+    // Modifico el timeout de conexion a la bdd por defecto son 30s
+    // Y el timeout de jasmine es de 10, por tanto me daria el error de timeout
+    // de jasmine antes de obtener la respuesta de la bdd (sobre todo en casos de error)
     serverSelectionTimeoutMS: 1000
   })
+  .then(
+    ()=> {
+      console.log('Conexion exitosa')
+      done()
+    })
   .catch(err => {
     console.log('Error de conexion::', err)
     done()
-  })
-
-  const Cat = mongoose.model('Cat', { name: String });
-  
-
-  const kitty = new Cat({ name: 'Zildjian' });
-  console.log(kitty)
-  kitty.save()
-  .then(() => {
-    console.log('meow')
-    done()
-  })
-  
-  
-// Fin conexion mongo})
+  })  
 })
+
+afterAll(function (done) {
+  console.log('AFTER..... Elimino los documentos')
+  const elminados = Bicicleta.deleteMany({}) // retorna una query el cual tiene el metodo then como si fuera una promesa
+  elminados
+    .then((doc) => { // el method then ejecuta el query.
+      console.log('Cantidad eliminados: ', doc.deletedCount)
+      done()
+    })
+    .catch(error => { // Tambien es un metodo de query similar a las promesas
+      console.log('Error: ', error)
+      done()
+    })
+})
+
 // Describe es un grupo de tests. En este caso la lista de bicis
 describe('Bicicileta.allBicis ', () => {
-  it('La lista debe estar vacia', () => {
-    const bicis = Bicicleta.allBicis()
+  it('La lista debe estar vacia', (done) => {
+    Bicicleta.allBicis()
       .then(bici => {
         console.log('Bicis: ', bici)
         expect(bici.length).toBe(0)
+        done()
       })
-    
   })
 })
 
 describe('Bicicleta.add', () => {
   it('agregamos una bici', (done) => {
     Bicicleta.allBicis()
-      .then(bicis =>{
+      .then(bicis => {
         expect(bicis.length).toBe(0)
+        const bicicletas = [
+          Bicicleta.createInstance(12, 'Negra', 'Modelo de prueba', [2,3]),
+          Bicicleta.createInstance(13, 'Marrón', 'Modelo de prueba nro 2', [12,11])
+        ]
+        return Bicicleta.add(bicicletas)
+      })
+      .then(res => {
+        // Res es el objeto que se agrego
+        console.log('bdd res: ', res)
+        console.log('Color', res[0].color)
+        expect(res[0].color).toBe('Negra')
+        // Busco nuevamente las bicis en la bdd y retorno la promesa
+        return Bicicleta.allBicis()
+        done()
+      })
+      .then(bicisEnBDD => {
+        expect(bicisEnBDD.length).toBe()
         done()
       })
       .catch(err => {
         console.log('Error ', err)
         done()
       })
-      done()
+      //done()
       
 
   })
